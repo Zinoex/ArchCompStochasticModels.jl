@@ -1,2 +1,2 @@
 
-abstract type AbstractBenchmarkSystem end
+abstract type BenchmarkSpecification end

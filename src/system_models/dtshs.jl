@@ -1,9 +1,9 @@
 using LazySets, StaticArrays
 
 """
-    DiscreteTimeSwitchedHybridSystem{N, P, F, G, H, T, S}
+    DiscreteTimeStochasticHybridSystem
 
-A discrete-time switched hybrid system is a tuple ``H = (\\mathcal{Q}, n, \\mathcal{U}, \\Sigma, T_x, T_q, R)`` where:
+A discrete-time stochastic hybrid system in the style of [1] is a tuple ``H = (\\mathcal{Q}, n, \\mathcal{U}, \\Sigma, T_x, T_q, R)`` where:
 - ``\\mathcal{Q} = \\{q_1, q_2, \\ldots, q_m\\}`` is a finite set of discrete modes;
 - ``n : \\mathcal{Q} \\to \\mathbb{N}`` is the number of continuous dimensions in each mode.
     The hybrid state space is defined as ``\\mathcal{S} = \\bigcup_{q \\in \\mathcal{Q}} \\{q\\} \\times \\mathbb{R}^{n(q)}``;
@@ -18,31 +18,64 @@ the system that evolves according to the following at each time step ``k`` with 
 
 1. Let ``u_k, \\sigma_k = \\mu(s_k)``;
 2. Extract the (potential) mode transition ``q_{k+1} \\sim T_q(\\cdot \\mid s_k, u_k)``;
-3. If ``q_{k+1} = q_k``, then extract the continuous state evolution as ``x_{k + 1} \\sim T_x(\\cdot \\mid s_k, u_k)``;
-4. If ``q_{k+1} \\neq q_k``, then extract the continuous state evolution as ``x_{k + 1} \\sim R(\\cdot \\mid s_k, \\sigma_k, q_{k+1})``;
+3. If ``q_{k+1} = q_k``, then extract the continuous state evolution as ``x_{k + 1} \\sim T_x(\\cdot \\mid s_k, u_k)``, and
+4. If ``q_{k+1} \\neq q_k``, then extract the continuous state evolution as ``x_{k + 1} \\sim R(\\cdot \\mid s_k, \\sigma_k, q_{k+1})``.
 
 !!! warning
     The transition and reset control space are assumed to be compact but it is not enforced in the type definition.
 
+
+## Fields
+
+
+## Example
+```julia
+
+```
+
+[1] Abate, A., Prandini, M., Lygeros, J., & Sastry, S. (2008). Probabilistic reachability and safety for controlled discrete time stochastic hybrid systems. Automatica, 44(11), 2724-2734.
+
 """
-struct DiscreteTimeSwitchedHybridSystem{M, U <: LazySet, S <: LazySet, TX, TQ, TR} <: AbstractBenchmarkSystem
+struct DiscreteTimeStochasticHybridSystem{M, 
+    U <: LazySet,
+    TQ <: DiscreteTransitionKernel,
+    TX <: ContinuousTransitionKernel,
+    S <: OrNothing{<:LazySet},
+    TR <: OrNothing{<:ContinuousTransitionKernel}
+    } <: AbstractBenchmarkSystem
+    parameters::Dict{String, Any}
     cont_dims::SVector{M, Int}
     transition_control_space::U
-    reset_control_space::S
-    continuous_transition_kernel::TX
     discrete_transition_kernel::TQ
+    continuous_transition_kernel::TX
+    reset_control_space::S
     reset_transition_kernel::TR
-    parameters::Dict{String, Any}
+end
+
+function DiscreteTimeStochasticHybridSystem(
+    parameters::Dict{String, Any},
+    cont_dims::SVector{M, Int}, 
+    transition_control_space::U,
+    discrete_transition_kernel::TQ,
+    continuous_transition_kernel::TX
+    ) where {M, U <: LazySet, TQ <: DiscreteTransitionKernel, TX <: ContinuousTransitionKernel}
+    
+    if !all_modes_same_dim(cont_dims)
+        throw(ArgumentError("All modes must have the same number of continuous dimensions"))
+    end
+
+    return DiscreteTimeStochasticHybridSystem(parameters, cont_dims, transition_control_space, continuous_transition_kernel, discrete_transition_kernel, nothing, nothing)
 end
 
 ### Accessors
-num_discrete_modes(::DiscreteTimeSwitchedHybridSystem{M}) where {M} = M
-num_continuous_dims(H::DiscreteTimeSwitchedHybridSystem, q) = H.cont_dims[q]
-transition_control_space(H::DiscreteTimeSwitchedHybridSystem) = H.transition_control_space
-reset_control_space(H::DiscreteTimeSwitchedHybridSystem) = H.reset_control_space
-continuous_transition_kernel(H::DiscreteTimeSwitchedHybridSystem) = H.continuous_transition_kernel
-discrete_transition_kernel(H::DiscreteTimeSwitchedHybridSystem) = H.discrete_transition_kernel
-reset_transition_kernel(H::DiscreteTimeSwitchedHybridSystem) = H.reset_transition_kernel
+num_discrete_modes(::DiscreteTimeStochasticHybridSystem{M}) where {M} = M
+num_continuous_dims(H::DiscreteTimeStochasticHybridSystem, q) = H.cont_dims[q]
+transition_control_space(H::DiscreteTimeStochasticHybridSystem) = H.transition_control_space
+reset_control_space(H::DiscreteTimeStochasticHybridSystem) = H.reset_control_space
+continuous_transition_kernel(H::DiscreteTimeStochasticHybridSystem) = H.continuous_transition_kernel
+discrete_transition_kernel(H::DiscreteTimeStochasticHybridSystem) = H.discrete_transition_kernel
+reset_transition_kernel(H::DiscreteTimeStochasticHybridSystem) = H.reset_transition_kernel
 
 ### Characteristics of the system
-same_dim_all_modes(H::DiscreteTimeSwitchedHybridSystem) = all(H.cont_dims .== H.cont_dims[1])
+all_modes_same_dim(H::DiscreteTimeStochasticHybridSystem) = all_modes_same_dim(H.cont_dims)
+all_modes_same_dim(cont_dims::SVector{M, Int}) where {M} = all(cont_dims .== cont_dims[1])

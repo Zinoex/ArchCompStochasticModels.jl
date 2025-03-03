@@ -1,3 +1,13 @@
+"""
+Automated Anaesthesia Delievery System Benchmark
+
+The concentration of Propofol in different compartments of the body are modelled using the three-compartment pharmacokinetic system.
+An automated system controls the basal dosage of Propofol to the patient, while an aneasthesiologist can administer a bolus dose.
+The system model includes a stochastic model of the aneasthesiologist behavior based on the concentration and the number of bolus
+doses administered. The hybrid system behavior arises from this aneasthesiologist behavior.
+
+First presented in Abate, A., Blom, H., Cauchi, N., Degiorgio, K., Fraenzle, M., Hahn, E. M., ... & Vinod, A. P. (2019). ARCH-COMP19 category report: Stochastic modelling. In 6th International Workshop on Applied Verification of Continuous and Hybrid Systems, ARCH 2019 (pp. 62-102). EasyChair.
+"""
 function automated_anaesthesia()
     parameters = Dict(
         "k_10" => 0.4436, 
@@ -24,16 +34,125 @@ function automated_anaesthesia()
         0.00001
     ]
 
+    U = Interval(0.0, 7.0)
+
     function mean(q, x, u)
-        return A * x + B_u * (u + parameters["bolus_dose_rate"] * (q == 1))
+        q = state2binary(q, 9)
+
+        return A * x + B_u * (u + parameters["bolus_dose_rate"] * Int(q[1]))
     end
 
-    M = [1e-3, 1e-3, 1e-3]
-
+    M = [5, 5, 5]
     Tx = DiagonalGaussianKernel(mean, M)
 
     # Discrete transition kernel
-    A_q = [
+    num_discrete_modes = 2^9
 
+    α = 0.1  # TODO: Find the correct value
+    Tq_region1 = HalfSpace([1.0, 0.0, 0.0], α)  # z₁ ≤ α
+    Tq_region1_matrix = SparseMatrixCSC{Float64}(undef, num_discrete_modes, num_discrete_modes)
+
+    for j in 1:num_discrete_modes
+        q = state2binary(j, 9)
+        s = sum(q)
+        
+        # qp0 = [0, q[1:end-1]]
+        qp0 = circshift(q, 1)
+        qp0[1] = 0
+        qp0 = binary2state(qp0)
+
+        # qp1 = [1, q[1:end-1]]
+        qp1 = circshift(q, 1)
+        qp1[1] = 1
+        qp1 = binary2state(qp1)
+
+        if s == 0
+            Tq_region1_matrix[qp0, j] = 0.1
+            Tq_region1_matrix[qp1, j] = 0.9
+        elseif s == 1
+            Tq_region1_matrix[qp0, j] = 0.5
+            Tq_region1_matrix[qp1, j] = 0.5
+        else
+            Tq_region1_matrix[qp0, q] = 1.0
+        end
+    end
+
+    Tq_region2 = HalfSpace([-1.0, 0.0, 0.0], α) # z₁ > α
+    Tq_region2_matrix = SparseMatrixCSC{Float64}(undef, num_discrete_modes, num_discrete_modes)
+
+    for j in 1:num_discrete_modes
+        q = state2binary(j, 9)
+        s = sum(q)
+        
+        # qp0 = [0, q[1:end-1]]
+        qp0 = circshift(q, 1)
+        qp0[1] = 0
+        qp0 = binary2state(qp0)
+
+        # qp1 = [1, q[1:end-1]]
+        qp1 = circshift(q, 1)
+        qp1[1] = 1
+        qp1 = binary2state(qp1)
+
+        if s ≤ 1
+            Tq_region1_matrix[qp0, j] = 0.05
+            Tq_region1_matrix[qp1, j] = 0.95
+        else
+            Tq_region1_matrix[qp0, q] = 1.0
+        end
+    end
+
+    Tq = RegionDependentSparseTransitionKernel([(Tq_region1, Tq_region1_matrix), (Tq_region2, Tq_region2_matrix)])
+
+    cont_dims = @SVector fill(3, num_discrete_modes)
+    system = DiscreteTimeStochasticHybridSystem(parameters, cont_dims, U, Tx, Tq)
+
+    return system
+end
+
+"""
+Fully-Automated Anaesthesia Delievery System Benchmark
+
+The concentration of Propofol in different compartments of the body are modelled using the three-compartment pharmacokinetic system.
+An fully-automated system controls the dosage of Propofol to the patient.
+"""
+function fully_automated_anaesthesia()
+    parameters = Dict(
+        "k_10" => 0.4436, 
+        "k_12" => 0.1140,
+        "k_13" => 0.0419,
+        "k_21" => 0.0550,
+        "k_31" => 0.0033,
+        "V" => 16.044,
+        "Ts" => 20.00,  # [s]
+        "bolus_dose_rate" => 30.0,  # [mg/min]
+    )
+    parameters["bolus_dose"] = parameters["bolus_dose_rate"] / 60 * parameters["Ts"]  # [mg]
+    
+    # Continuous transition kernel
+    A = [
+        0.8192  0.03412 0.01265;
+        0.01646 0.9822  0.0001;
+        0.0009  0.00002 0.9989
     ]
+
+    B_u = [
+        0.01883
+        0.0002
+        0.00001
+    ]
+
+    X = Universe(3)
+    U = Interval(0.0, 7.0)
+
+    function mean(x, u)
+        return A * x + B_u * u
+    end
+
+    M = [5, 5, 5]
+    Tx = DiagonalGaussianKernel(mean, M)
+
+    system = DiscreteTimeStochasticSystem(parameters, X, U, Tx)
+
+    return system
 end

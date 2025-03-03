@@ -1,8 +1,7 @@
 
-abstract type TransitionKernel end
+abstract type ContinuousTransitionKernel end
 
-
-abstract type AbstractGaussianKernel end
+abstract type AbstractGaussianKernel <: ContinuousTransitionKernel end
 
 struct GaussianKernel{M, C} <: AbstractGaussianKernel
     mean::M
