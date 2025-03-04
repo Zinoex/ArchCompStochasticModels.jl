@@ -110,6 +110,36 @@ function automated_anaesthesia()
     return system
 end
 
+function automated_anaesthesia_finite_time_ra()
+    system = automated_anaesthesia()
+
+    ## Finite time reach-avoid specification
+    avoid = Complement(Hyperrectangle(low=[1.0, 0.0, 0.0], high=[6.0, 10.0, 10.0]))
+    reach = Hyperrectangle(low=[4.0, 8.0, 8.0], high=[6.0, 10.0, 10.0])
+    time_horizon = 10
+    spec = ControllerSynthesisSpecification(maximize,
+        FiniteTimeReachAvoidSpecification(avoid, reach, time_horizon)
+    )
+
+    ft_ra_prob = BenchmarkProblem("automated_anaesthesia_finite_time_ra", system, spec)
+
+    return ft_ra_prob
+end
+
+function automated_anaesthesia_first_hitting_time_ra()
+    system = automated_anaesthesia()
+
+    ## First hitting time reach-avoid specification
+    spec = ControllerSynthesisSpecification(minimize,
+        FirstHittingTimeReachAvoidSpecification(avoid, reach)
+    )
+
+    fht_ra_prob = BenchmarkProblem("automated_anaesthesia_first_hitting_time_ra", system, spec)
+
+    return fht_ra_prob
+end
+
+
 """
 Fully-Automated Anaesthesia Delievery System Benchmark
 
@@ -155,4 +185,33 @@ function fully_automated_anaesthesia()
     system = DiscreteTimeStochasticSystem(parameters, X, U, Tx)
 
     return system
+end
+
+function fully_automated_anaesthesia_finite_time_ra()
+    system = fully_automated_anaesthesia()
+
+    ## Finite time reach-avoid specification
+    avoid = Complement(Hyperrectangle(low=[1.0, 0.0, 0.0], high=[6.0, 10.0, 10.0]))
+    reach = Hyperrectangle(low=[4.0, 8.0, 8.0], high=[6.0, 10.0, 10.0])
+    time_horizon = 10
+    spec = ControllerSynthesisSpecification(maximize,
+        FiniteTimeReachAvoidSpecification(avoid, reach, time_horizon)
+    )
+
+    ft_ra_prob = BenchmarkProblem("fully_automated_anaesthesia_finite_time_ra", system, spec)
+
+    return ft_ra_prob
+end
+
+function fully_automated_anaesthesia_first_hitting_time_ra()
+    system = fully_automated_anaesthesia()
+
+    ## First hitting time reach-avoid specification
+    spec = ControllerSynthesisSpecification(minimize,
+        FirstHittingTimeReachAvoidSpecification(avoid, reach)
+    )
+
+    fht_ra_prob = BenchmarkProblem("fully_automated_anaesthesia_first_hitting_time_ra", system, spec)
+
+    return fht_ra_prob
 end
