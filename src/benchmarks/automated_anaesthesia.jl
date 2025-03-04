@@ -18,6 +18,8 @@ function automated_anaesthesia()
         "V" => 16.044,
         "Ts" => 20.00,  # [s]
         "bolus_dose_rate" => 30.0,  # [mg/min]
+        "alpha" => 0.1,  # TODO: Find the correct value
+        "noise_variance" => 5.0
     )
     parameters["bolus_dose"] = parameters["bolus_dose_rate"] / 60 * parameters["Ts"]  # [mg]
     
@@ -32,7 +34,7 @@ function automated_anaesthesia()
         0.01883
         0.0002
         0.00001
-    ]
+    ][:, :]
 
     U = Interval(0.0, 7.0)
 
@@ -42,13 +44,13 @@ function automated_anaesthesia()
         return A * x + B_u * (u + parameters["bolus_dose_rate"] * Int(q[1]))
     end
 
-    M = [5, 5, 5]
+    M = fill(parameters["noise_variance"], 3)
     Tx = DiagonalGaussianKernel(mean, M)
 
     # Discrete transition kernel
     num_discrete_modes = 2^9
 
-    α = 0.1  # TODO: Find the correct value
+    α = parameters["alpha"]
     Tq_region1 = HalfSpace([1.0, 0.0, 0.0], α)  # z₁ ≤ α
     Tq_region1_matrix = SparseMatrixCSC{Float64}(undef, num_discrete_modes, num_discrete_modes)
 
@@ -156,6 +158,7 @@ function fully_automated_anaesthesia()
         "V" => 16.044,
         "Ts" => 20.00,  # [s]
         "bolus_dose_rate" => 30.0,  # [mg/min]
+        "noise_variance" => 5.0
     )
     parameters["bolus_dose"] = parameters["bolus_dose_rate"] / 60 * parameters["Ts"]  # [mg]
     
@@ -179,7 +182,7 @@ function fully_automated_anaesthesia()
         return A * x + B_u * u
     end
 
-    M = [5, 5, 5]
+    M = fill(parameters["noise_variance"], 3)
     Tx = DiagonalGaussianKernel(mean, M)
 
     system = DiscreteTimeStochasticSystem(parameters, X, U, Tx)

@@ -13,6 +13,11 @@ struct FirstHittingTimeReachAvoidSpecification{S, T} <: BenchmarkProperty
     target_set::T
 end
 
+struct FiniteTimeSafetySpecification{S} <: BenchmarkProperty
+    safe_set::S
+    N::Int
+end
+
 @enum SynthesisMode minimize maximize
 
 struct ControllerSynthesisSpecification{S <: BenchmarkProperty} <: BenchmarkSpecification
