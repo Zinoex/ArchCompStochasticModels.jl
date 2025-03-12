@@ -17,6 +17,8 @@ Concrete values taken from Abate, A., Blom, H., Cauchi, N., Degiorgio, K., Fraen
 ```
 """
 function cs1_bas()
+    parameters = Dict{String, Any}()
+
     A = [
         0.6682  0.0     0.02632    0.0
         0.0     0.6830  0.0        0.02096
@@ -50,7 +52,7 @@ function cs1_bas()
     X = Universe(4)
     U = Interval(15.0, 22.0)
 
-    system = DiscreteTimeStochasticSystem(X, U, Tx)
+    system = DiscreteTimeStochasticSystem(parameters, X, U, Tx)
 
     return system
 end
@@ -88,6 +90,8 @@ First presented in Abate, A., Blom, H., Cauchi, N., Hartmanns, A., Lesser, K., O
 ```
 """
 function cs2_bas()
+    parameters = Dict{String, Any}()
+
     A = [
         0.9678 0.0    0.0036 0.0    0.0036 0.0    0.0036
         0.0    0.9682 0.0    0.0034 0.0    0.0034 0.0034
@@ -135,7 +139,7 @@ function cs2_bas()
     X = Universe(7)
     U = Interval(15.0, 22.0)
 
-    system = DiscreteTimeStochasticSystem(X, U, Tx)
+    system = DiscreteTimeStochasticSystem(parameters, X, U, Tx)
 
     return system
 end
