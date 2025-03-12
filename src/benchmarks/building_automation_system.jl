@@ -68,7 +68,7 @@ function cs1_bas_finite_time_safety()
         FiniteTimeSafetySpecification(safe_set, time_horizon)
     )
 
-    prob = BenchmarkProblem("cs1_bas", system, spec)
+    prob = BenchmarkProblem("cs1_bas_finite_time_safety", system, spec)
 
     return prob
 end
@@ -153,7 +153,7 @@ function cs2_bas_finite_time_safety()
         FiniteTimeSafetySpecification(safe_set, time_horizon)
     )
 
-    prob = BenchmarkProblem("cs2_bas", system, spec)
+    prob = BenchmarkProblem("cs2_bas_finite_time_safety", system, spec)
 
     return prob
 end

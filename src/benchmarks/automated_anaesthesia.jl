@@ -135,7 +135,7 @@ function automated_anaesthesia_finite_time_reachavoid()
         FiniteTimeReachAvoidSpecification(avoid, reach, time_horizon)
     )
 
-    ft_ra_prob = BenchmarkProblem("automated_anaesthesia_finite_time_ra", system, spec)
+    ft_ra_prob = BenchmarkProblem("automated_anaesthesia_finite_time_reachavoid", system, spec)
 
     return ft_ra_prob
 end
@@ -148,7 +148,7 @@ function automated_anaesthesia_first_hitting_time_reachavoid()
         FirstHittingTimeReachAvoidSpecification(avoid, reach)
     )
 
-    fht_ra_prob = BenchmarkProblem("automated_anaesthesia_first_hitting_time_ra", system, spec)
+    fht_ra_prob = BenchmarkProblem("automated_anaesthesia_first_hitting_time_reachavoid", system, spec)
 
     return fht_ra_prob
 end
@@ -224,7 +224,7 @@ function fully_automated_anaesthesia_finite_time_reachavoid()
         FiniteTimeReachAvoidSpecification(avoid, reach, time_horizon)
     )
 
-    ft_ra_prob = BenchmarkProblem("fully_automated_anaesthesia_finite_time_ra", system, spec)
+    ft_ra_prob = BenchmarkProblem("fully_automated_anaesthesia_finite_time_reachavoid", system, spec)
 
     return ft_ra_prob
 end
@@ -237,7 +237,7 @@ function fully_automated_anaesthesia_first_hitting_time_reachavoid()
         FirstHittingTimeReachAvoidSpecification(avoid, reach)
     )
 
-    fht_ra_prob = BenchmarkProblem("fully_automated_anaesthesia_first_hitting_time_ra", system, spec)
+    fht_ra_prob = BenchmarkProblem("fully_automated_anaesthesia_first_hitting_time_reachavoid", system, spec)
 
     return fht_ra_prob
 end
