@@ -13,7 +13,7 @@ struct DiagonalGaussianKernel{M, V} <: AbstractGaussianKernel
     variance::V
 end
 
-struct UniformKernel{C, S} <: ContinuousTransitionKernel
+struct RectangularUniformKernel{C, S} <: ContinuousTransitionKernel
     center::C
     support::S
 end

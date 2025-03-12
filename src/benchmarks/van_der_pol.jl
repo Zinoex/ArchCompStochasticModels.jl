@@ -16,16 +16,16 @@ function van_der_pol()
         "sampling_time" => 0.1  # [s]
     )
     
-    function nominal(x, u)
+    function center(x, u)
         return [
             x[1] + praameters["sampling_time"] * x[2],
             x[2] + parameters["sampling_time"] * ((1 - x[1]^2) * x[2] - x[1])
         ]
     end
 
-    W = BallInf(0.02)
+    r = [0.02, 0.02]
 
-    Tx = UniformKernel(nominal, W)
+    Tx = RectangularUniformKernel(center, r)
 
     X = Universe(2)
     U = Universe(0)
@@ -92,10 +92,10 @@ function controlled_van_der_pol()
     end
 
     function radius(x, u)
-        return Hyperrectangle(; low=[-0.02, -0.02 * u], high = [0.02, 0.02 * u])
+        return [0.02, 0.02 * u]
     end
 
-    Tx = UniformKernel(center, radius)
+    Tx = RectangularUniformKernel(center, radius)
 
     X = Universe(2)
     U = Universe(1)
