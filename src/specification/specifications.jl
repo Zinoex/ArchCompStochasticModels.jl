@@ -18,9 +18,19 @@ struct FiniteTimeSafetySpecification{S} <: BenchmarkProperty
     N::Int
 end
 
+struct BuchiSpecification{S} <: BenchmarkProperty
+    sets::Dict{String, LazySet}
+    formula::String
+    # TODO: Test validity of the formula
+end
+
 @enum SynthesisMode minimize maximize
 
 struct ControllerSynthesisSpecification{S <: BenchmarkProperty} <: BenchmarkSpecification
     synthesis_mode::SynthesisMode
+    underlying_spec::S
+end
+
+struct ProbabilityOneInitialConditionSpecification{S <: BenchmarkProperty} <: BenchmarkSpecification
     underlying_spec::S
 end
