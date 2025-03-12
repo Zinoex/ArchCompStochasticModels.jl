@@ -18,6 +18,12 @@ struct FiniteTimeSafetySpecification{S} <: BenchmarkProperty
     N::Int
 end
 
+struct ExactTimeReachAvoidSpecification{S, T} <: BenchmarkProperty
+    avoid_set::S
+    target_set::T
+    N::Int
+end
+
 struct BuchiSpecification{S} <: BenchmarkProperty
     sets::Dict{String, LazySet}
     formula::String
@@ -33,4 +39,9 @@ end
 
 struct ProbabilityOneInitialConditionSpecification{S <: BenchmarkProperty} <: BenchmarkSpecification
     underlying_spec::S
+end
+
+struct ProbabilityGreaterThanInitialConditionSpecification{S <: BenchmarkProperty} <: BenchmarkSpecification
+    underlying_spec::S
+    threshold::Float64
 end
