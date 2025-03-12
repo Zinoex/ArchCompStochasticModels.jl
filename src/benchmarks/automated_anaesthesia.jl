@@ -6,7 +6,19 @@ An automated system controls the basal dosage of Propofol to the patient, while 
 The system model includes a stochastic model of the aneasthesiologist behavior based on the concentration and the number of bolus
 doses administered. The hybrid system behavior arises from this aneasthesiologist behavior.
 
-First presented in Abate, A., Blom, H., Cauchi, N., Degiorgio, K., Fraenzle, M., Hahn, E. M., ... & Vinod, A. P. (2019). ARCH-COMP19 category report: Stochastic modelling. In 6th International Workshop on Applied Verification of Continuous and Hybrid Systems, ARCH 2019 (pp. 62-102). EasyChair.
+First presented in Abate, A., Blom, H., Cauchi, N., Hartmanns, A., Lesser, K., Oishi, M., ... & Vinod, A. P. (2018). ARCH-COMP19 category report: Stochastic modelling. In 5th International Workshop on Applied Verification of Continuous and Hybrid Systems, ARCH 2018 (pp. 71-103). EasyChair.
+
+## Mathematical Model
+```math
+\\begin{aligned}
+    \\bar{x}[k + 1] &= \\begin{bmatrix} 0.8192 & 0.03412 & 0.01265 \\\\ 0.01646 & 0.9822 & 0.0001 \\\\ 0.0009 & 0.00002 & 0.9989 \\end{bmatrix} \\bar{x}[k] + \\begin{bmatrix} 0.01883 \\\\ 0.0002 \\\\ 0.00001 \\end{bmatrix} (v[k] + \\sigma[k]) + w[k] \\\\
+                    &= A \\bar{x}[k] + B (v[k] + \\sigma[k]) + w[k]
+\\end{aligned}
+```
+where ``\\bar{x}[k]`` is the continuous state vector, ``v[k]`` is the automated delivery system control input, ``w[k] \\sim \\mathcal{N}(0, M)`` is the process noise, and ``\\sigma[k]`` is the noise from the aneasthesiologist.
+``\\sigma[k]`` is a semi-Markov random variable taking values in ``\\{0, 30\\}`` that represents the aneasthesiologist's decision to administer a bolus dose.
+To make the stochastic system Markovian, a binary state vector ``q[k]`` is introduced that represents the aneasthesiologist's decision to administer a bolus dose at time ``k``.
+Then the stochastic decision to administer a bolus dose is conditioned on ``\\bar{x}_1[k]`` and ``q[k]``.
 """
 function automated_anaesthesia()
     parameters = Dict(
@@ -112,7 +124,7 @@ function automated_anaesthesia()
     return system
 end
 
-function automated_anaesthesia_finite_time_ra()
+function automated_anaesthesia_finite_time_reachavoid()
     system = automated_anaesthesia()
 
     ## Finite time reach-avoid specification
@@ -128,7 +140,7 @@ function automated_anaesthesia_finite_time_ra()
     return ft_ra_prob
 end
 
-function automated_anaesthesia_first_hitting_time_ra()
+function automated_anaesthesia_first_hitting_time_reachavoid()
     system = automated_anaesthesia()
 
     ## First hitting time reach-avoid specification
@@ -147,6 +159,17 @@ Fully-Automated Anaesthesia Delievery System Benchmark
 
 The concentration of Propofol in different compartments of the body are modelled using the three-compartment pharmacokinetic system.
 An fully-automated system controls the dosage of Propofol to the patient.
+
+First presented in Abate, A., Blom, H., Cauchi, N., Hartmanns, A., Lesser, K., Oishi, M., ... & Vinod, A. P. (2018). ARCH-COMP19 category report: Stochastic modelling. In 5th International Workshop on Applied Verification of Continuous and Hybrid Systems, ARCH 2018 (pp. 71-103). EasyChair.
+
+## Mathematical Model
+```math
+\\begin{aligned}
+    \\bar{x}[k + 1] &= \\begin{bmatrix} 0.8192 & 0.03412 & 0.01265 \\\\ 0.01646 & 0.9822 & 0.0001 \\\\ 0.0009 & 0.00002 & 0.9989 \\end{bmatrix} \\bar{x}[k] + \\begin{bmatrix} 0.01883 \\\\ 0.0002 \\\\ 0.00001 \\end{bmatrix} v[k] + w[k] \\\\
+                    &= A \\bar{x}[k] + B v[k] + w[k]
+\\end{aligned}
+```
+where ``\\bar{x}[k]`` is the continuous state vector, ``v[k]`` is the automated delivery system control input, and ``w[k] \\sim \\mathcal{N}(0, M)`` is the process noise.
 """
 function fully_automated_anaesthesia()
     parameters = Dict(
@@ -190,7 +213,7 @@ function fully_automated_anaesthesia()
     return system
 end
 
-function fully_automated_anaesthesia_finite_time_ra()
+function fully_automated_anaesthesia_finite_time_reachavoid()
     system = fully_automated_anaesthesia()
 
     ## Finite time reach-avoid specification
@@ -206,7 +229,7 @@ function fully_automated_anaesthesia_finite_time_ra()
     return ft_ra_prob
 end
 
-function fully_automated_anaesthesia_first_hitting_time_ra()
+function fully_automated_anaesthesia_first_hitting_time_reachavoid()
     system = fully_automated_anaesthesia()
 
     ## First hitting time reach-avoid specification
