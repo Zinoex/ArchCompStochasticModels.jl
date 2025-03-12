@@ -11,7 +11,7 @@ Concrete values taken from Abate, A., Blom, H., Cauchi, N., Degiorgio, K., Fraen
 ## Mathematical Model
 ```math
 \\begin{aligned}
-    x[k + 1] &= A x[k] + B u[k] + Q + B_w w[k]\\
+    x[k + 1] &= A x[k] + B u[k] + Q + B_w w[k]\\\\
     y[k] &= \\begin{bmatrix} 1 & 0 & 0 & 0 \\\\ 0 & 1 & 0 & 0 \\end{bmatrix} x[k]
 \\end{aligned}
 ```
@@ -84,7 +84,7 @@ First presented in Abate, A., Blom, H., Cauchi, N., Hartmanns, A., Lesser, K., O
 
 ```math
 \\begin{aligned}
-    x[k + 1] &= A x[k] + B u[k] + Q + B_w w[k]\\
+    x[k + 1] &= A x[k] + B u[k] + Q + B_w w[k]\\\\
     y[k] &= \\begin{bmatrix} 1 & 0 & 0 & 0 & 0 & 0 & 0 \\end{bmatrix} x[k]
 \\end{aligned}
 ```

@@ -6,7 +6,7 @@ First presented in Alessandro, A., Henk, B., Nathalie, C., Joanna, D., Arnd, H.,
 ## Mathematical Model
 ```math
 \\begin{aligned}
-    x_1[k + 1] &= x_1[k] + \\tau x_2[k] + w[k]\\
+    x_1[k + 1] &= x_1[k] + \\tau x_2[k] + w[k]\\\\
     x_2[k + 1] &= x_2[k] + \\tau ((1 - x_1[k]^2) x_2[k] - x_1[k]) + w[k]
 \\end{aligned}
 ```
@@ -74,7 +74,7 @@ First presented in Alessandro, A., Henk, B., Nathalie, C., Joanna, D., Arnd, H.,
 ## Mathematical Model
 ```math
 \\begin{aligned}
-    x_1[k + 1] &= x_1[k] + \\tau x_2[k] + w[k]\\
+    x_1[k + 1] &= x_1[k] + \\tau x_2[k] + w[k]\\\\
     x_2[k + 1] &= x_2[k] + \\tau ((1 - x_1[k]^2) x_2[k] - x_1[k]) + u[k] w[k]
 \\end{aligned}
 ```
