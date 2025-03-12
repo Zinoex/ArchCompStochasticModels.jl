@@ -1,5 +1,20 @@
-"""
+using PDMats
 
+"""
+Building Automation System 2D Benchmark
+
+A building automation system (BAS) with two zones, each heated by one radiator and with a shared air supply.
+
+First presented in Abate, A., Blom, H., Cauchi, N., Hartmanns, A., Lesser, K., Oishi, M., ... & Vinod, A. P. (2018). ARCH-COMP19 category report: Stochastic modelling. In 5th International Workshop on Applied Verification of Continuous and Hybrid Systems, ARCH 2018 (pp. 71-103). EasyChair.
+Concrete values taken from Abate, A., Blom, H., Cauchi, N., Degiorgio, K., Fraenzle, M., Hahn, E. M., ... & Vinod, A. P. (2019). ARCH-COMP19 category report: Stochastic modelling. In 6th International Workshop on Applied Verification of Continuous and Hybrid Systems, ARCH 2019 (pp. 62-102). EasyChair.
+
+## Mathematical Model
+```math
+\\begin{aligned}
+    x[k + 1] &= A x[k] + B u[k] + Q + B_w w[k]\\
+    y[k] &= \\begin{bmatrix} 1 & 0 & 0 & 0 \\\\ 0 & 1 & 0 & 0 \\end{bmatrix} x[k]
+\\end{aligned}
+```
 """
 function cs1_bas()
     A = [
@@ -37,6 +52,12 @@ function cs1_bas()
 
     system = DiscreteTimeStochasticSystem(X, U, Tx)
 
+    return system
+end
+
+function cs1_bas_finite_time_safety()
+    system = cs1_bas()
+
     safe_set = CartesianProduct(
         Hyperrectangle(low=[19.5, 19.5], high=[20.5, 20.5]),
         Universe(2)
@@ -52,6 +73,20 @@ function cs1_bas()
     return prob
 end
 
+"""
+Building Automation System 7D Benchmark
+
+A building automation system (BAS).
+
+First presented in Abate, A., Blom, H., Cauchi, N., Hartmanns, A., Lesser, K., Oishi, M., ... & Vinod, A. P. (2018). ARCH-COMP19 category report: Stochastic modelling. In 5th International Workshop on Applied Verification of Continuous and Hybrid Systems, ARCH 2018 (pp. 71-103). EasyChair.
+
+```math
+\\begin{aligned}
+    x[k + 1] &= A x[k] + B u[k] + Q + B_w w[k]\\
+    y[k] &= \\begin{bmatrix} 1 & 0 & 0 & 0 & 0 & 0 & 0 \\end{bmatrix} x[k]
+\\end{aligned}
+```
+"""
 function cs2_bas()
     A = [
         0.9678 0.0    0.0036 0.0    0.0036 0.0    0.0036
@@ -82,4 +117,43 @@ function cs2_bas()
         0.0    0.0066 0.0       0.0       0.0      0.0
         0.0    0.0    0.0       0.0       0.0      0.0
     ]
+
+    μ = [9.0, 15.0, 500.0, 500.0, 35.0, 35.0]
+    Σ = PDiagMat([1.0, 1.0, 100.0, 100.0, 5.0, 5.0])  # Positive definite diagonal matrix
+
+    # Relying on the linear transformation theorem for multi-variate normal distributions.
+    # https://statproofbook.github.io/P/mvn-ltt.html
+    transformed_μ = Bw * μ
+    transformed_Σ = Bw * Σ * Bw'
+
+    function mean(x, u)
+        return A * x + B * u + Q + transformed_μ
+    end
+
+    Tx = GaussianKernel(mean, transformed_Σ)
+
+    X = Universe(7)
+    U = Interval(15.0, 22.0)
+
+    system = DiscreteTimeStochasticSystem(X, U, Tx)
+
+    return system
+end
+
+function cs2_bas_finite_time_safety()
+    system = cs2_bas()
+
+    safe_set = CartesianProduct(
+        Hyperrectangle(low=[19.5, 19.5], high=[20.5, 20.5]),
+        Universe(6)
+    )
+    time_horizon = 6
+    spec = ControllerSynthesisSpecification(
+        maximize,
+        FiniteTimeSafetySpecification(safe_set, time_horizon)
+    )
+
+    prob = BenchmarkProblem("cs2_bas", system, spec)
+
+    return prob
 end
