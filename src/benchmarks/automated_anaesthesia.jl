@@ -1,8 +1,8 @@
 function automated_anaesthesia_regions()
-    avoid = Complement(Hyperrectangle(low=[1.0, 0.0, 0.0], high=[6.0, 10.0, 10.0]))
+    safe = Hyperrectangle(low=[1.0, 0.0, 0.0], high=[6.0, 10.0, 10.0])
     reach = Hyperrectangle(low=[4.0, 8.0, 8.0], high=[6.0, 10.0, 10.0])
 
-    return avoid, reach
+    return safe, reach
 end
 
 """
@@ -135,10 +135,10 @@ function automated_anaesthesia_finite_time_safety()
     system = automated_anaesthesia()
 
     ## Finite time safety specification
-    avoid, reach = automated_anaesthesia_regions()
+    safe, reach = automated_anaesthesia_regions()
     time_horizon = 10
     spec = ControllerSynthesisSpecification(maximize,
-        FiniteTimeSafetySpecification(avoid, time_horizon)
+        FiniteTimeSafetySpecification(safe, time_horizon)
     )
 
     ft_ra_prob = BenchmarkProblem("automated_anaesthesia_finite_time_safety", system, spec)
@@ -150,7 +150,8 @@ function automated_anaesthesia_first_hitting_time_reachavoid()
     system = automated_anaesthesia()
 
     ## First hitting time reach-avoid specification
-    avoid, reach = automated_anaesthesia_regions()
+    safe, reach = automated_anaesthesia_regions()
+    avoid = Complement(safe)
     spec = ControllerSynthesisSpecification(minimize,
         FirstHittingTimeReachAvoidSpecification(avoid, reach)
     )
@@ -224,10 +225,10 @@ function fully_automated_anaesthesia_finite_time_safety()
     system = fully_automated_anaesthesia()
 
     ## Finite time safety specification
-    avoid, reach = automated_anaesthesia_regions()
+    safe, reach = automated_anaesthesia_regions()
     time_horizon = 10
     spec = ControllerSynthesisSpecification(maximize,
-        FiniteTimeSafetySpecification(avoid, time_horizon)
+        FiniteTimeSafetySpecification(safe, time_horizon)
     )
 
     ft_ra_prob = BenchmarkProblem("fully_automated_anaesthesia_finite_time_safety", system, spec)
@@ -239,6 +240,8 @@ function fully_automated_anaesthesia_first_hitting_time_reachavoid()
     system = fully_automated_anaesthesia()
 
     ## First hitting time reach-avoid specification
+    safe, reach = automated_anaesthesia_regions()
+    avoid = Complement(safe)
     spec = ControllerSynthesisSpecification(minimize,
         FirstHittingTimeReachAvoidSpecification(avoid, reach)
     )
