@@ -1,3 +1,10 @@
+function automated_anaesthesia_regions()
+    avoid = Complement(Hyperrectangle(low=[1.0, 0.0, 0.0], high=[6.0, 10.0, 10.0]))
+    reach = Hyperrectangle(low=[4.0, 8.0, 8.0], high=[6.0, 10.0, 10.0])
+
+    return avoid, reach
+end
+
 """
 Automated Anaesthesia Delievery System Benchmark
 
@@ -6,7 +13,7 @@ An automated system controls the basal dosage of Propofol to the patient, while 
 The system model includes a stochastic model of the aneasthesiologist behavior based on the concentration and the number of bolus
 doses administered. The hybrid system behavior arises from this aneasthesiologist behavior.
 
-First presented in Abate, A., Blom, H., Cauchi, N., Hartmanns, A., Lesser, K., Oishi, M., ... & Vinod, A. P. (2018). ARCH-COMP19 category report: Stochastic modelling. In 5th International Workshop on Applied Verification of Continuous and Hybrid Systems, ARCH 2018 (pp. 71-103). EasyChair.
+First presented in Abate, A., Blom, H., Cauchi, N., Hartmanns, A., Lesser, K., Oishi, M., ... & Vinod, A. P. (2018). ARCH-COMP18 category report: Stochastic modelling. In 5th International Workshop on Applied Verification of Continuous and Hybrid Systems, ARCH 2018 (pp. 71-103). EasyChair.
 
 ## Mathematical Model
 ```math
@@ -128,8 +135,7 @@ function automated_anaesthesia_finite_time_reachavoid()
     system = automated_anaesthesia()
 
     ## Finite time reach-avoid specification
-    avoid = Complement(Hyperrectangle(low=[1.0, 0.0, 0.0], high=[6.0, 10.0, 10.0]))
-    reach = Hyperrectangle(low=[4.0, 8.0, 8.0], high=[6.0, 10.0, 10.0])
+    avoid, reach = automated_anaesthesia_regions()
     time_horizon = 10
     spec = ControllerSynthesisSpecification(maximize,
         FiniteTimeReachAvoidSpecification(avoid, reach, time_horizon)
@@ -144,6 +150,7 @@ function automated_anaesthesia_first_hitting_time_reachavoid()
     system = automated_anaesthesia()
 
     ## First hitting time reach-avoid specification
+    avoid, reach = automated_anaesthesia_regions()
     spec = ControllerSynthesisSpecification(minimize,
         FirstHittingTimeReachAvoidSpecification(avoid, reach)
     )
@@ -160,7 +167,7 @@ Fully-Automated Anaesthesia Delievery System Benchmark
 The concentration of Propofol in different compartments of the body are modelled using the three-compartment pharmacokinetic system.
 An fully-automated system controls the dosage of Propofol to the patient.
 
-First presented in Abate, A., Blom, H., Cauchi, N., Hartmanns, A., Lesser, K., Oishi, M., ... & Vinod, A. P. (2018). ARCH-COMP19 category report: Stochastic modelling. In 5th International Workshop on Applied Verification of Continuous and Hybrid Systems, ARCH 2018 (pp. 71-103). EasyChair.
+First presented in Abate, A., Blom, H., Cauchi, N., Hartmanns, A., Lesser, K., Oishi, M., ... & Vinod, A. P. (2018). ARCH-COMP18 category report: Stochastic modelling. In 5th International Workshop on Applied Verification of Continuous and Hybrid Systems, ARCH 2018 (pp. 71-103). EasyChair.
 
 ## Mathematical Model
 ```math
@@ -217,8 +224,7 @@ function fully_automated_anaesthesia_finite_time_reachavoid()
     system = fully_automated_anaesthesia()
 
     ## Finite time reach-avoid specification
-    avoid = Complement(Hyperrectangle(low=[1.0, 0.0, 0.0], high=[6.0, 10.0, 10.0]))
-    reach = Hyperrectangle(low=[4.0, 8.0, 8.0], high=[6.0, 10.0, 10.0])
+    avoid, reach = automated_anaesthesia_regions()
     time_horizon = 10
     spec = ControllerSynthesisSpecification(maximize,
         FiniteTimeReachAvoidSpecification(avoid, reach, time_horizon)
