@@ -49,7 +49,7 @@ function integrator_chain_exact_time_reachavoid(n_integrators)
     target_set = Hyperrectangle(low=[-8.0 for i in 1:n_integrators], high=[8.0 for i in 1:n_integrators])
 
     horizon = 5
-    spec = ExactTimeReachAvoidSpecification(safe_set, target_set, horizon)
+    spec = ExactTimeReachAvoidSpecification(Complement(safe_set), target_set, horizon)
     spec = ProbabilityGreaterThanInitialConditionSpecification(spec, system.parameters["alpha"])
     spec = ControllerSynthesisSpecification(maximize, spec)
 
