@@ -8,6 +8,12 @@ struct FiniteTimeReachAvoidSpecification{S, T} <: BenchmarkProperty
     N::Int
 end
 
+struct InfiniteTimeReachAvoidSpecification{S, T} <: BenchmarkProperty
+    avoid_set::S
+    target_set::T
+    convergence_threshold::Float64
+end
+
 struct FirstHittingTimeReachAvoidSpecification{S, T} <: BenchmarkProperty
     avoid_set::S
     target_set::T
