@@ -39,6 +39,6 @@ struct DiscreteTimeStochasticSystem{
 end
 
 ### Accessors
-num_continuous_dims(H::DiscreteTimeStochasticSystem, q) = LazySets.dim(H.X)
+num_continuous_dims(H::DiscreteTimeStochasticSystem) = LazySets.dim(H.X)
 control_space(H::DiscreteTimeStochasticSystem) = H.control_space
 transition_kernel(H::DiscreteTimeStochasticSystem) = H.transition_kernel

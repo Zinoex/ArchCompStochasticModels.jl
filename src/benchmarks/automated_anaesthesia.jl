@@ -28,7 +28,7 @@ To make the stochastic system Markovian, a binary state vector ``q[k]`` is intro
 Then the stochastic decision to administer a bolus dose is conditioned on ``\\bar{x}_1[k]`` and ``q[k]``.
 """
 function automated_anaesthesia()
-    parameters = Dict(
+    parameters = Dict{String, Any}(
         "k_10" => 0.4436, 
         "k_12" => 0.1140,
         "k_13" => 0.0419,
@@ -179,7 +179,7 @@ First presented in Abate, A., Blom, H., Cauchi, N., Hartmanns, A., Lesser, K., O
 where ``\\bar{x}[k]`` is the continuous state vector, ``v[k]`` is the automated delivery system control input, and ``w[k] \\sim \\mathcal{N}(0, M)`` is the process noise.
 """
 function fully_automated_anaesthesia()
-    parameters = Dict(
+    parameters = Dict{String, Any}(
         "k_10" => 0.4436, 
         "k_12" => 0.1140,
         "k_13" => 0.0419,
