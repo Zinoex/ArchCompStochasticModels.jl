@@ -204,7 +204,7 @@ function fully_automated_anaesthesia()
         0.01883
         0.0002
         0.00001
-    ]
+    ][:, :]
 
     X = Universe(3)
     U = Interval(0.0, 7.0)
