@@ -131,17 +131,17 @@ function automated_anaesthesia()
     return system
 end
 
-function automated_anaesthesia_finite_time_reachavoid()
+function automated_anaesthesia_finite_time_safety()
     system = automated_anaesthesia()
 
-    ## Finite time reach-avoid specification
+    ## Finite time safety specification
     avoid, reach = automated_anaesthesia_regions()
     time_horizon = 10
     spec = ControllerSynthesisSpecification(maximize,
-        FiniteTimeReachAvoidSpecification(avoid, reach, time_horizon)
+        FiniteTimeSafetySpecification(avoid, time_horizon)
     )
 
-    ft_ra_prob = BenchmarkProblem("automated_anaesthesia_finite_time_reachavoid", system, spec)
+    ft_ra_prob = BenchmarkProblem("automated_anaesthesia_finite_time_safety", system, spec)
 
     return ft_ra_prob
 end
@@ -220,17 +220,17 @@ function fully_automated_anaesthesia()
     return system
 end
 
-function fully_automated_anaesthesia_finite_time_reachavoid()
+function fully_automated_anaesthesia_finite_time_safety()
     system = fully_automated_anaesthesia()
 
-    ## Finite time reach-avoid specification
+    ## Finite time safety specification
     avoid, reach = automated_anaesthesia_regions()
     time_horizon = 10
     spec = ControllerSynthesisSpecification(maximize,
-        FiniteTimeReachAvoidSpecification(avoid, reach, time_horizon)
+        FiniteTimeSafetySpecification(avoid, time_horizon)
     )
 
-    ft_ra_prob = BenchmarkProblem("fully_automated_anaesthesia_finite_time_reachavoid", system, spec)
+    ft_ra_prob = BenchmarkProblem("fully_automated_anaesthesia_finite_time_safety", system, spec)
 
     return ft_ra_prob
 end
