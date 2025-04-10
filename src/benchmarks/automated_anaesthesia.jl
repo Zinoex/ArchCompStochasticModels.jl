@@ -57,11 +57,11 @@ function automated_anaesthesia()
 
     U = Interval(0.0, 7.0)
 
-    function mean(q, x, u)
-        q = state2binary(q, 9)
-
-        return A * x + B_u * (u + parameters["bolus_dose_rate"] * Int(q[1]))
-    end
+    # A * x + B_u * (u + parameters["bolus_dose_rate"] * Int(q[1]))
+    mean = Parallel2(
+        Linear2(A, B_u),
+        Discrete1(q -> B_u * parameters["bolus_dose_rate"] * Int(state2binary(q, 9)[1])),
+    )
 
     M = fill(parameters["noise_variance"], 3)
     Tx = DiagonalGaussianKernel(mean, M)
@@ -209,9 +209,8 @@ function fully_automated_anaesthesia()
     X = Universe(3)
     U = Interval(0.0, 7.0)
 
-    function mean(x, u)
-        return A * x + B_u * u
-    end
+    # A * x + B_u * u
+    mean = Linear2(A, B_u)
 
     M = fill(parameters["noise_variance"], 3)
     Tx = DiagonalGaussianKernel(mean, M)

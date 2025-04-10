@@ -14,21 +14,20 @@ function integrator_chain(n_integrators)
         "alpha" => 0.01          # (0, 1) probability threshold
     )
     
-    function nominal(x, u)
-        x_next = zeros(n_integrators)
-        for i in 1:n_integrators
-            x_next[i] = x[i]
-            for j in i + 1:n_integrators
-                x_next[i] += parameters["sampling_time"]^(j - i) * x[j] / factorial(j - i)
-            end
+    # A * x + B * u
+    A = zeros(n_integrators, n_integrators)
+    for i in 1:n_integrators
+        A[i, i] = 1.0
+        for j in i + 1:n_integrators
+            A[i, j] = parameters["sampling_time"]^(j - i) / factorial(j - i)
         end
-
-        for i in 1:n_integrators
-            x_next[i] += parameters["sampling_time"]^(n_integrators - i + 1) / factorial(n_integrators - i + 1) * u[1]
-        end
-
-        return x_next
     end
+    B = zeros(n_integrators, 1)
+    for i in 1:n_integrators
+        B[i, 1] = parameters["sampling_time"]^(n_integrators - i + 1) / factorial(n_integrators - i + 1)
+    end
+
+    nominal = Linear2(A, B)
 
     σ = [0.01 for i in 1:n_integrators]
 

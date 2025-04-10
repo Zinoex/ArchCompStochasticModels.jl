@@ -43,9 +43,8 @@ function cs1_bas()
 
     M = [0.0774, 0.0774, 0.3872, 0.3098]
 
-    function mean(x, u)
-        return A * x + B * u + Q
-    end
+    # A * x + B * u + Q
+    mean = Affine2(A, B, Q)
 
     Tx = DiagonalGaussianKernel(mean, M)
 
@@ -122,7 +121,7 @@ function cs2_bas()
         0.0    0.0    0.0       0.0       0.0      0.0
     ]
 
-    Qc = [
+    Q = [
         0.0493
         -0.0055
         0.0387
@@ -140,9 +139,8 @@ function cs2_bas()
     transformed_μ = Bw * μ
     transformed_Σ = Bw * Σ * Bw'
 
-    function mean(x, u)
-        return A * x + B * u + Q + transformed_μ
-    end
+    # A * x + B * u + Q + transformed_μ
+    mean = Affine2(A, B, Q + transformed_μ)
 
     Tx = GaussianKernel(mean, transformed_Σ)
 

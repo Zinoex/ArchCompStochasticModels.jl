@@ -29,10 +29,10 @@ function van_der_pol()
             x[2] + parameters["sampling_time"] * ((1 - x[1]^2) * x[2] - x[1])
         ]
     end
-
+    c = Smooth2(center)
     r = [0.02, 0.02]
 
-    Tx = RectangularUniformKernel(center, r)
+    Tx = RectangularUniformKernel(c, r)
 
     X = Universe(2)
     U = Universe(0)
@@ -95,12 +95,14 @@ function controlled_van_der_pol()
             x[2] + parameters["sampling_time"] * ((1 - x[1]^2) * x[2] - x[1])
         ]
     end
+    c = Smooth2(center)
 
     function radius(x, u)
         return [0.02, 0.02 * u[1]]
     end
+    r = Smooth2(radius)
 
-    Tx = RectangularUniformKernel(center, radius)
+    Tx = RectangularUniformKernel(c, r)
 
     X = Universe(2)
     U = Universe(1)
@@ -151,10 +153,11 @@ function controlled_gaussian_van_der_pol()
             x[2] + parameters["sampling_time"] * ((1 - x[1]^2) * x[2] - x[1]) + u[1]
         ]
     end
+    m = Smooth2(mean)
     
     M = [0.2, 0.2]
 
-    Tx = DiagonalGaussianKernel(mean, M)
+    Tx = DiagonalGaussianKernel(m, M)
 
     X = Universe(2)
     U = Universe(1)
