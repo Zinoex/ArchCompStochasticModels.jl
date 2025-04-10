@@ -30,9 +30,9 @@ end
 struct Affine2{T, MT1 <: AbstractMatrix, MT2 <: AbstractMatrix, VT <: AbstractVector} <: AbstractAffineFunction
     A::MT1
     B::MT2
-    b::VT
+    c::VT
 end
-(f::Affine2)(x, u) = f.A * x + f.B * u + f.b
+(f::Affine2)(x, u) = f.A * x + f.B * u + f.c
 
 struct Smooth1{F <: Function} <: AbstractSmoothFunction
     func::F
