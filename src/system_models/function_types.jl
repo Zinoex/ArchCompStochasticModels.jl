@@ -11,7 +11,7 @@ abstract type AbstractDiscreteFunction end
 abstract type AbstractCompositeFunction <: AbstractFunction end
 
 struct Linear1{T, MT <: AbstractMatrix} <: AbstractLinearFunction
-    A::M
+    A::MT
 end
 (f::Linear1)(x) = f.A * x
 
@@ -34,12 +34,12 @@ struct Affine2{T, MT1 <: AbstractMatrix, MT2 <: AbstractMatrix, VT <: AbstractVe
 end
 (f::Affine2)(x, u) = f.A * x + f.B * u + f.b
 
-struct Smooth1{F <: AbstractMatrix} <: AbstractSmoothFunction
+struct Smooth1{F <: Function} <: AbstractSmoothFunction
     func::F
 end
 (f::Smooth1)(x) = f.func(x)
 
-struct Smooth2{F <: AbstractMatrix} <: AbstractSmoothFunction
+struct Smooth2{F <: Function} <: AbstractSmoothFunction
     func::F
 end
 (f::Smooth2)(x, u) = f.func(x, u)
