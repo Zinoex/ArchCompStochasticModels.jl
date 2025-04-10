@@ -156,7 +156,7 @@ function cs2_bas_finite_time_safety()
     system = cs2_bas()
 
     safe_set = CartesianProduct(
-        Hyperrectangle(low=[19.5, 19.5], high=[20.5, 20.5]),
+        Hyperrectangle(low=[-0.5], high=[0.5]),
         Universe(6)
     )
     time_horizon = 6
