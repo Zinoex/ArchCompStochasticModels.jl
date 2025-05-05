@@ -37,7 +37,7 @@ function van_der_pol()
     X = Universe(2)
     U = Universe(0)
 
-    system = DiscreteTimeStochasticSystem(X, U, Tx)
+    system = DiscreteTimeStochasticSystem(parameters, X, U, Tx)
 
     return system
 end
@@ -107,7 +107,7 @@ function controlled_van_der_pol()
     X = Universe(2)
     U = Universe(1)
 
-    system = DiscreteTimeStochasticSystem(X, U, Tx)
+    system = DiscreteTimeStochasticSystem(paramters, X, U, Tx)
 
     return system
 end
@@ -162,7 +162,7 @@ function controlled_gaussian_van_der_pol()
     X = Universe(2)
     U = Universe(1)
 
-    system = DiscreteTimeStochasticSystem(X, U, Tx)
+    system = DiscreteTimeStochasticSystem(parameters, X, U, Tx)
 
     return system
 end
