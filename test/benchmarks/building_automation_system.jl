@@ -1,0 +1,5 @@
+bs_cs1_finite_time_safety = ArchCompStochasticModels.cs1_bas_finite_time_safety()
+@test bs_cs1_finite_time_safety isa ArchCompStochasticModels.BenchmarkProblem
+
+bs_cs2_finite_time_safety = ArchCompStochasticModels.cs2_bas_finite_time_safety()
+@test bs_cs2_finite_time_safety isa ArchCompStochasticModels.BenchmarkProblem

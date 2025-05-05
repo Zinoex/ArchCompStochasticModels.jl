@@ -1,0 +1,12 @@
+
+ic_n1_et_ra_prob = ArchCompStochasticModels.integrator_chain_exact_time_reachavoid(1)
+@test ic_n1_et_ra_prob isa ArchCompStochasticModels.BenchmarkProblem
+
+ic_n2_et_ra_prob = ArchCompStochasticModels.integrator_chain_exact_time_reachavoid(2)
+@test ic_n2_et_ra_prob isa ArchCompStochasticModels.BenchmarkProblem
+
+ic_n3_et_ra_prob = ArchCompStochasticModels.integrator_chain_exact_time_reachavoid(3)
+@test ic_n3_et_ra_prob isa ArchCompStochasticModels.BenchmarkProblem
+
+ic_n10_et_ra_prob = ArchCompStochasticModels.integrator_chain_exact_time_reachavoid(10)
+@test ic_n10_et_ra_prob isa ArchCompStochasticModels.BenchmarkProblem

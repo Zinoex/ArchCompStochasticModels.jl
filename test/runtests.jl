@@ -1,6 +1,6 @@
 using ArchCompStochasticModels
 using Test
 
-@testset "ArchCompStochasticModels.jl" begin
-    # Write your tests here.
+@testset verbose = true "ArchCompStochasticModels.jl" begin
+    @testset verbose = true "benchmarks" include("benchmarks/benchmarks.jl")
 end

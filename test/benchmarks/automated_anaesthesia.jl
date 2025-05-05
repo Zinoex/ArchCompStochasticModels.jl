@@ -1,0 +1,11 @@
+as_ft_s_prob = ArchCompStochasticModels.automated_anaesthesia_finite_time_safety()
+@test as_ft_s_prob isa ArchCompStochasticModels.BenchmarkProblem
+
+as_fht_ra_prob = ArchCompStochasticModels.automated_anaesthesia_first_hitting_time_reachavoid()
+@test as_fht_ra_prob isa ArchCompStochasticModels.BenchmarkProblem
+
+fas_ft_s_prob = ArchCompStochasticModels.fully_automated_anaesthesia_finite_time_safety()
+@test fas_ft_s_prob isa ArchCompStochasticModels.BenchmarkProblem
+
+fas_fht_ra_prob = ArchCompStochasticModels.fully_automated_anaesthesia_first_hitting_time_reachavoid()
+@test fas_fht_ra_prob isa ArchCompStochasticModels.BenchmarkProblem
