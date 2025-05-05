@@ -71,7 +71,7 @@ function automated_anaesthesia()
 
     α = parameters["alpha"]
     Tq_region1 = HalfSpace([1.0, 0.0, 0.0], α)  # z₁ ≤ α
-    Tq_region1_matrix = SparseMatrixCSC{Float64}(undef, num_discrete_modes, num_discrete_modes)
+    Tq_region1_matrix = spzeros(num_discrete_modes, num_discrete_modes)
 
     for j in 1:num_discrete_modes
         q = state2binary(j, 9)
@@ -94,12 +94,12 @@ function automated_anaesthesia()
             Tq_region1_matrix[qp0, j] = 0.5
             Tq_region1_matrix[qp1, j] = 0.5
         else
-            Tq_region1_matrix[qp0, q] = 1.0
+            Tq_region1_matrix[qp0, j] = 1.0
         end
     end
 
     Tq_region2 = HalfSpace([-1.0, 0.0, 0.0], α) # z₁ > α
-    Tq_region2_matrix = SparseMatrixCSC{Float64}(undef, num_discrete_modes, num_discrete_modes)
+    Tq_region2_matrix = spzeros(num_discrete_modes, num_discrete_modes)
 
     for j in 1:num_discrete_modes
         q = state2binary(j, 9)
@@ -119,14 +119,14 @@ function automated_anaesthesia()
             Tq_region1_matrix[qp0, j] = 0.05
             Tq_region1_matrix[qp1, j] = 0.95
         else
-            Tq_region1_matrix[qp0, q] = 1.0
+            Tq_region1_matrix[qp0, j] = 1.0
         end
     end
 
     Tq = RegionDependentSparseTransitionKernel([(Tq_region1, Tq_region1_matrix), (Tq_region2, Tq_region2_matrix)])
 
     cont_dims = @SVector fill(3, num_discrete_modes)
-    system = DiscreteTimeStochasticHybridSystem(parameters, cont_dims, U, Tx, Tq)
+    system = DiscreteTimeStochasticHybridSystem(parameters, cont_dims, U, Tq, Tx)
 
     return system
 end
