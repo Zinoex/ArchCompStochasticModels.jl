@@ -1,5 +1,5 @@
 function state2binary(x, n)
-    return BitVector(digits(x, base=2, pad=n))
+    return BitVector(digits(x - 1, base=2, pad=n))
 end
 
 function binary2state(b::BitVector)
@@ -9,5 +9,5 @@ function binary2state(b::BitVector)
         val += v * i
         v <<= 1
     end
-    return val
+    return val + 1
 end
