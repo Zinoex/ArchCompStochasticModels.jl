@@ -1,0 +1,11 @@
+vdp_qual = ArchCompStochasticModels.van_der_pol_qualitative()
+@test vdp_qual isa ArchCompStochasticModels.BenchmarkProblem
+
+vdp_quan = ArchCompStochasticModels.van_der_pol_quantitative()
+@test vdp_quan isa ArchCompStochasticModels.BenchmarkProblem
+
+vdp_ctrl_quan = ArchCompStochasticModels.controlled_van_der_pol_quantitative()
+@test vdp_ctrl_quan isa ArchCompStochasticModels.BenchmarkProblem
+
+vdp_gauss_ctrl_quan = ArchCompStochasticModels.controlled_gaussian_van_der_pol_quantitative()
+@test vdp_gauss_ctrl_quan isa ArchCompStochasticModels.BenchmarkProblem
