@@ -7,30 +7,30 @@ abstract type AbstractFunction end
 abstract type AbstractAffineFunction <: AbstractFunction end
 abstract type AbstractLinearFunction <: AbstractFunction end
 abstract type AbstractSmoothFunction <: AbstractFunction end
-abstract type AbstractDiscreteFunction end
+abstract type AbstractDiscreteFunction <: AbstractFunction end
 abstract type AbstractCompositeFunction <: AbstractFunction end
 
-struct Linear1{T, MT <: AbstractMatrix} <: AbstractLinearFunction
-    A::MT
+struct Linear1{M <: AbstractMatrix} <: AbstractLinearFunction
+    A::M
 end
 (f::Linear1)(x) = f.A * x
 
-struct Linear2{T, MT1 <: AbstractMatrix, MT2 <: AbstractMatrix} <: AbstractLinearFunction
-    A::MT1
-    B::MT2
+struct Linear2{M1 <: AbstractMatrix, M2 <: AbstractMatrix} <: AbstractLinearFunction
+    A::M1
+    B::M2
 end
 (f::Linear2)(x, u) = f.A * x + f.B * u
 
-struct Affine1{T, MT <: AbstractMatrix, VT <: AbstractVector} <: AbstractAffineFunction
-    A::MT
-    b::VT
+struct Affine1{M <: AbstractMatrix, V <: AbstractVector} <: AbstractAffineFunction
+    A::M
+    b::V
 end
 (f::Affine1)(x) = f.A * x + f.b
 
-struct Affine2{T, MT1 <: AbstractMatrix, MT2 <: AbstractMatrix, VT <: AbstractVector} <: AbstractAffineFunction
-    A::MT1
-    B::MT2
-    c::VT
+struct Affine2{M1 <: AbstractMatrix, M2 <: AbstractMatrix, V <: AbstractVector} <: AbstractAffineFunction
+    A::M1
+    B::M2
+    c::V
 end
 (f::Affine2)(x, u) = f.A * x + f.B * u + f.c
 
@@ -44,10 +44,10 @@ struct Smooth2{F <: Function} <: AbstractSmoothFunction
 end
 (f::Smooth2)(x, u) = f.func(x, u)
 
-struct Discrete1{F <: AbstractFunction} <: AbstractDiscreteFunction
+struct Discrete1{F <: Function} <: AbstractDiscreteFunction
     func::F
 end
-(f::Discrete1)(x) = f.func(x)
+(f::Discrete1)(q) = f.func(q)
 
 struct Parallel2{F1 <: AbstractFunction, F2 <: AbstractFunction} <: AbstractCompositeFunction
     func1::F1
