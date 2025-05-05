@@ -38,16 +38,16 @@ end
 
 @enum SynthesisMode minimize maximize
 
-struct ControllerSynthesisSpecification{S <: BenchmarkProperty} <: BenchmarkSpecification
+struct ControllerSynthesisSpecification{S <: BenchmarkSpecification} <: BenchmarkSpecification
     synthesis_mode::SynthesisMode
     underlying_spec::S
 end
 
 struct ProbabilityOneInitialConditionSpecification{S <: BenchmarkProperty} <: BenchmarkSpecification
-    underlying_spec::S
+    underlying_prop::S
 end
 
 struct ProbabilityGreaterThanInitialConditionSpecification{S <: BenchmarkProperty} <: BenchmarkSpecification
-    underlying_spec::S
+    underlying_prop::S
     threshold::Float64
 end
