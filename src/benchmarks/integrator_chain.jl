@@ -52,7 +52,7 @@ function integrator_chain_exact_time_reachavoid(n_integrators)
     spec = ProbabilityGreaterThanInitialConditionSpecification(spec, system.parameters["alpha"])
     spec = ControllerSynthesisSpecification(maximize, spec)
 
-    prob = BenchmarkProblem("integrator_chain_($(n_integators))_exact_time_reachavoid", system, spec)
+    prob = BenchmarkProblem("integrator_chain_($n_integrators)_exact_time_reachavoid", system, spec)
 
     return prob
 end
