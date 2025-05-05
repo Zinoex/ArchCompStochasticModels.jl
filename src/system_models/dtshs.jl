@@ -64,7 +64,7 @@ function DiscreteTimeStochasticHybridSystem(
         throw(ArgumentError("All modes must have the same number of continuous dimensions"))
     end
 
-    return DiscreteTimeStochasticHybridSystem(parameters, cont_dims, transition_control_space, continuous_transition_kernel, discrete_transition_kernel, nothing, nothing)
+    return DiscreteTimeStochasticHybridSystem(parameters, cont_dims, transition_control_space, discrete_transition_kernel, continuous_transition_kernel, nothing, nothing)
 end
 
 ### Accessors
