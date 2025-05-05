@@ -30,8 +30,8 @@ struct ExactTimeReachAvoidSpecification{S, T} <: BenchmarkProperty
     N::Int
 end
 
-struct BuchiSpecification{S} <: BenchmarkProperty
-    sets::Dict{String, LazySet}
+struct BuchiSpecification <: BenchmarkProperty
+    sets::Dict{String, <:LazySet}
     formula::String
     # TODO: Test validity of the formula
 end
