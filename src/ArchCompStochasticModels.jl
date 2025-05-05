@@ -1,5 +1,7 @@
 module ArchCompStochasticModels
 
+using LinearAlgebra
+
 const OrNothing{T} = Union{Nothing, T}
 
 include("utils.jl")
