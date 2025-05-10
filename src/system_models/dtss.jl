@@ -84,7 +84,7 @@ struct DiscreteTimeStochasticDisturbanceSystem{
     parameters::Dict{String, Any}
     state_space::X
     control_space::U
-    disturbance_space:W,
+    disturbance_space::W
     transition_kernel::TX
 end
 
