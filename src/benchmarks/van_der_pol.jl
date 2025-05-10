@@ -168,7 +168,7 @@ function controlled_gaussian_van_der_pol()
 end
 
 function controlled_gaussian_van_der_pol_quantitative()
-    system = van_der_pol()
+    system = controlled_gaussian_van_der_pol()
 
     A, B = van_der_pol_regions()
 
