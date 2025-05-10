@@ -37,7 +37,7 @@ function reduced_patrol_robot()
 end
 
 function reduced_patrol_robot_infinite_time_reach()
-    sys = reduced_patrol_robot()
+    system = reduced_patrol_robot()
     T, _ = reduced_patrol_robot_regions()
 
     ## Infinite time reachability specification
@@ -52,7 +52,7 @@ function reduced_patrol_robot_infinite_time_reach()
 end
 
 function reduced_patrol_robot_infinite_time_reachavoid()
-    sys = reduced_patrol_robot()
+    system = reduced_patrol_robot()
     T, A = reduced_patrol_robot_regions()
 
     ## Infinite time reachability specification
