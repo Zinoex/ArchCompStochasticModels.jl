@@ -21,6 +21,13 @@ struct Linear2{M1 <: AbstractMatrix, M2 <: AbstractMatrix} <: AbstractLinearFunc
 end
 (f::Linear2)(x, u) = f.A * x + f.B * u
 
+struct Linear3{M1 <: AbstractMatrix, M2 <: AbstractMatrix, M3 <: AbstractMatrix} <: AbstractLinearFunction
+    A::M1
+    B::M2
+    C::M3
+end
+(f::Linear3)(x, u, w) = f.A * x + f.B * u + f.C * w
+
 struct Affine1{M <: AbstractMatrix, V <: AbstractVector} <: AbstractAffineFunction
     A::M
     b::V
@@ -34,6 +41,14 @@ struct Affine2{M1 <: AbstractMatrix, M2 <: AbstractMatrix, V <: AbstractVector} 
 end
 (f::Affine2)(x, u) = f.A * x + f.B * u + f.c
 
+struct Affine3{M1 <: AbstractMatrix, M2 <: AbstractMatrix, M3 <: AbstractMatrix, V <: AbstractVector} <: AbstractAffineFunction
+    A::M1
+    B::M2
+    C::M3
+    d::V
+end
+(f::Affine2)(x, u, w) = f.A * x + f.B * u + F.C * w + f.d
+
 struct Smooth1{F <: Function} <: AbstractSmoothFunction
     func::F
 end
@@ -43,6 +58,11 @@ struct Smooth2{F <: Function} <: AbstractSmoothFunction
     func::F
 end
 (f::Smooth2)(x, u) = f.func(x, u)
+
+struct Smooth3{F <: Function} <: AbstractSmoothFunction
+    func::F
+end
+(f::Smooth3)(x, u, w) = f.func(x, u, w)
 
 struct Discrete1{F <: Function} <: AbstractDiscreteFunction
     func::F
