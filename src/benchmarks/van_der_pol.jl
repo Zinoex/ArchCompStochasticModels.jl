@@ -25,7 +25,7 @@ function van_der_pol()
     
     function center(x, u)
         return [
-            x[1] + praameters["sampling_time"] * x[2],
+            x[1] + parameters["sampling_time"] * x[2],
             x[2] + parameters["sampling_time"] * ((1 - x[1]^2) * x[2] - x[1])
         ]
     end
@@ -91,7 +91,7 @@ function controlled_van_der_pol()
     
     function center(x, u)
         return [
-            x[1] + praameters["sampling_time"] * x[2],
+            x[1] + parameters["sampling_time"] * x[2],
             x[2] + parameters["sampling_time"] * ((1 - x[1]^2) * x[2] - x[1])
         ]
     end
@@ -149,7 +149,7 @@ function controlled_gaussian_van_der_pol()
     
     function mean(x, u)
         return [
-            x[1] + praameters["sampling_time"] * x[2],
+            x[1] + parameters["sampling_time"] * x[2],
             x[2] + parameters["sampling_time"] * ((1 - x[1]^2) * x[2] - x[1]) + u[1]
         ]
     end
