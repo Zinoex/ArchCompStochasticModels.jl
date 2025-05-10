@@ -2,6 +2,11 @@
 abstract type BenchmarkSpecification end
 abstract type BenchmarkProperty <: BenchmarkSpecification end
 
+struct InfiniteTimeReachabilitySpecification{T} <: BenchmarkProperty
+    target_set::T
+    convergence_threshold::Float64
+end
+
 struct FiniteTimeReachAvoidSpecification{S, T} <: BenchmarkProperty
     avoid_set::S
     target_set::T
@@ -14,6 +19,12 @@ struct InfiniteTimeReachAvoidSpecification{S, T} <: BenchmarkProperty
     convergence_threshold::Float64
 end
 
+struct ExactTimeReachAvoidSpecification{S, T} <: BenchmarkProperty
+    avoid_set::S
+    target_set::T
+    N::Int
+end
+
 struct FirstHittingTimeReachAvoidSpecification{S, T} <: BenchmarkProperty
     avoid_set::S
     target_set::T
@@ -21,12 +32,6 @@ end
 
 struct FiniteTimeSafetySpecification{S} <: BenchmarkProperty
     safe_set::S
-    N::Int
-end
-
-struct ExactTimeReachAvoidSpecification{S, T} <: BenchmarkProperty
-    avoid_set::S
-    target_set::T
     N::Int
 end
 
