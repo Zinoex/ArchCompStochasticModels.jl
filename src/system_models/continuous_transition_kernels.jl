@@ -17,3 +17,7 @@ struct RectangularUniformKernel{C, S} <: ContinuousTransitionKernel
     center::C
     support::S
 end
+
+struct PiecewiseContinuousKernel{T <: Tuple{<:LazySet, ContinuousTransitionKernel}} <: ContinuousTransitionKernel
+    regions::Vector{T}
+end
