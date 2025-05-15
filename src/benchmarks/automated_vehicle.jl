@@ -39,7 +39,7 @@ function automated_vehicle()
 
         return x .+ parameters["sampling_time"] * a
     end
-    m = Smooth2(mean)
+    m = Smooth2(small_velocity_mean)
     
     # Variance, not std.dev.
     M = [0.25, 0.25, 0.2, 0.1, 0.2, 0.2, 0.2] .^ 2
@@ -80,7 +80,7 @@ function automated_vehicle()
 
         return x .+ parameters["sampling_time"] * b
     end
-    m = Smooth2(mean)
+    m = Smooth2(high_velocity_mean)
 
     Tx23 = DiagonalGaussianKernel(m, M)
     
