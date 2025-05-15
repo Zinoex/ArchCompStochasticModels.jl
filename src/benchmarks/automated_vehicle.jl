@@ -10,27 +10,27 @@ TODO: Add mathematical model
 """
 function automated_vehicle()
     parameters = Dict{String, Any}(
-        "sampling_time" => 0.1,     # [s]
-        "wheelbase" => 2.5789,      # [m]
+        "sampling_time" => 0.1,       # [s]
+        "wheelbase" => 2.5789,        # [m]
         "friction" => 1.0489,
-        "mass" => 1093.3,           # [kg]
-        "front_distance" => 1.156,  # [m]
-        "rear_distance" => 1.422,   # [m]
-        "cog_height" => 0.6137,     # [m]
-        "moment_inertia" => 1791.6, # [kg m^2]
-        "front_stiffness" => 20.89, # [1/rad]
-        "rear_stiffness" => 20.89,  # [1/rad]
-        "gravity" => 9.82,          # [m/s^2]
+        "mass" => 1093.3,             # [kg]
+        "front_distance" => 1.156,    # [m]
+        "rear_distance" => 1.422,     # [m]
+        "cog_height" => 0.6137,       # [m]
+        "moment_inertia" => 1791.6,   # [kg m^2]
+        "front_stiffness" => 20.89,   # [1/rad]
+        "rear_stiffness" => 20.89,    # [1/rad]
+        "gravity" => 9.82,            # [m/s^2]
+        "acceleration_limit" => 11.5, # [m/s^2]
+        "steering_rate_limit" => 0.4, # [rad/s]
     )
     total_length = parameters["front_distance"] + parameters["rear_distance"]
-
-    satmu()
     
     function small_velocity_mean(x, u)
         a1 = x[4] * cos(x[5])
         a2 = x[4] * sin(x[5])
-        a3 = clamp(u[1], -0.1, 0.1)
-        a4 = clamp(u[2], -0.1, 0.1)
+        a3 = clamp(u[1], -parameters["steering_rate_limit"], parameters["steering_rate_limit"])
+        a4 = clamp(u[2], -parameters["acceleration_limit"], parameters["acceleration_limit"])
         a5 = (x[4] / parameters["wheelbase"]) * tan(x[3])
         a6 = (u[2] / parameters["wheelbase"]) * tan(x[3]) + (x[4] / (parameters["wheelbase"] * cos(x[3])^2)) * u[1] 
         a7 = 0
@@ -50,8 +50,8 @@ function automated_vehicle()
     function high_velocity_mean(x, u)
         b1 = x[4] * cos(x[5] + x[7])
         b2 = x[4] * sin(x[5] + x[7])
-        b3 = clamp(u[1], -0.1, 0.1)
-        b4 = clamp(u[2], -0.1, 0.1)
+        b3 = clamp(u[1], -parameters["steering_rate_limit"], parameters["steering_rate_limit"])
+        b4 = clamp(u[2], -parameters["acceleration_limit"], parameters["acceleration_limit"])
         b5 = x[6]
         b6 = (parameters["friction"] * parameters["mass"] / (parameters["moment_inertia"] * total_length)) * (
             parameters["front_distance"] * parameters["front_stiffness"] * (parameters["gravity"] * parameters["rear_distance"] − u[2] * parameters["height"]) * x[3] +
