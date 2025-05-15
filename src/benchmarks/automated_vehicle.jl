@@ -54,25 +54,25 @@ function automated_vehicle()
         b4 = clamp(u[2], -parameters["acceleration_limit"], parameters["acceleration_limit"])
         b5 = x[6]
         b6 = (parameters["friction"] * parameters["mass"] / (parameters["moment_inertia"] * total_length)) * (
-            parameters["front_distance"] * parameters["front_stiffness"] * (parameters["gravity"] * parameters["rear_distance"] − u[2] * parameters["height"]) * x[3] +
+            parameters["front_distance"] * parameters["front_stiffness"] * (parameters["gravity"] * parameters["rear_distance"] − u[2] * parameters["cog_height"]) * x[3] +
             (
-                parameters["rear_distance"] * parameters["rear_stiffness"] * (parameters["gravity"] * parameters["front_distance"] + u[2] * parameters["height"]) - 
-                parameters["front_distance"] * parameters["front_stiffness"] * (parameters["gravity"] * parameters["rear_distance"] − u[2] * parameters["height"])
+                parameters["rear_distance"] * parameters["rear_stiffness"] * (parameters["gravity"] * parameters["front_distance"] + u[2] * parameters["cog_height"]) - 
+                parameters["front_distance"] * parameters["front_stiffness"] * (parameters["gravity"] * parameters["rear_distance"] − u[2] * parameters["cog_height"])
             ) * x[7] -
             (
-                parameters["front_distance"]^2 * parameters["front_stiffness"] * (parameters["gravity"] * parameters["rear_distance"] - u[2] * parameters["height"]) +
-                parameters["rear_distance"]^2 * parameters["rear_stiffness"] * (parameters["gravity"] * parameters["front_distance"] + u[2] * parameters["height"])
+                parameters["front_distance"]^2 * parameters["front_stiffness"] * (parameters["gravity"] * parameters["rear_distance"] - u[2] * parameters["cog_height"]) +
+                parameters["rear_distance"]^2 * parameters["rear_stiffness"] * (parameters["gravity"] * parameters["front_distance"] + u[2] * parameters["cog_height"])
             ) * x[6] / x[4]
         )
         b7 = parameters["friction"] / (x[4] * total_length) * (
-            parameters["front_stiffness"] * (parameters["gravity"] * parameters["rear_distance"] − u[2] * parameters["height"]) * x[3] +
+            parameters["front_stiffness"] * (parameters["gravity"] * parameters["rear_distance"] − u[2] * parameters["cog_height"]) * x[3] +
             (
-                parameters["rear_stiffness"] * (parameters["gravity"] * parameters["front_distance"] + u[2] * parameters["height"]) +
-                parameters["front_stiffness"] * (parameters["gravity"] * parameters["rear_distance"] − u[2] * parameters["height"])
+                parameters["rear_stiffness"] * (parameters["gravity"] * parameters["front_distance"] + u[2] * parameters["cog_height"]) +
+                parameters["front_stiffness"] * (parameters["gravity"] * parameters["rear_distance"] − u[2] * parameters["cog_height"])
             ) * x[7] -
             (
-                parameters["front_distance"] * parameters["front_stiffness"] * (parameters["gravity"] * parameters["rear_distance"] - u[2] * parameters["height"]) -
-                parameters["rear_distance"] * parameters["rear_stiffness"] * (parameters["gravity"] * parameters["front_distance"] + u[2] * parameters["height"])
+                parameters["front_distance"] * parameters["front_stiffness"] * (parameters["gravity"] * parameters["rear_distance"] - u[2] * parameters["cog_height"]) -
+                parameters["rear_distance"] * parameters["rear_stiffness"] * (parameters["gravity"] * parameters["front_distance"] + u[2] * parameters["cog_height"])
             ) * x[6] / x[4]
         ) - x[6]
 
