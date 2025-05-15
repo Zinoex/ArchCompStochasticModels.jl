@@ -86,11 +86,11 @@ function automated_vehicle()
     
     # x[4] <= -0.1 ⟺ -x[4] >= 0.1
     # [0, 0, 0, -1, 0, 0, 0] * x >= 0.1
-    region2 = HalfSpace([0, 0, 0, -1, 0, 0, 0], 0.1)
+    region2 = HalfSpace([0.0, 0.0, 0.0, -1.0, 0.0, 0.0, 0.0], 0.1)
 
     # x[4] >= 0.1
     # [0, 0, 0, 1, 0, 0, 0] * x >= 0.1
-    region3 = HalfSpace([0, 0, 0, 1, 0, 0, 0], 0.1)
+    region3 = HalfSpace([0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0], 0.1)
 
     Tx = PiecewiseContinuousKernel([
         (region1, Tx1),
