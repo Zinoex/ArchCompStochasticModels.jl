@@ -109,13 +109,65 @@ end
 function automated_vehicle_finite_time_ra()
     system = automated_vehicle()
 
-    reach = Hyperrectangle(; low=[−1.5, 0.0], high=[0.0, 1.5]) × Universe(5)
+    reach = Hyperrectangle(; low=[-1.5, 0.0], high=[0.0, 1.5]) × Universe(5)
     avoid = Hyperrectangle(; low=[-1.5, -0.5], high=[0.0, 0.0]) × Universe(5)
 
     ra_spec = FiniteTimeReachAvoidSpecification(reach, avoid, 32)
     spec = ControllerSynthesisSpecification(maximize, ra_spec)
 
     prob = BenchmarkProblem("automated_vehicle_finite_time_ra", system, spec)
+
+    return prob
+end
+
+"""
+Reduced Automated Vehicle
+
+First presented in Alessandro, A., Henk, B., Nathalie, C., Joanna, D., Arnd, H., Mahmoud, K., ... & Zuliani, P. (2020). ARCH-COMP20 Category Report: Stochastic Models.
+TODO: Update to relevant paper
+
+## Mathematical Model
+TODO: Add mathematical model
+"""
+function reduced_automated_vehicle()
+    parameters = Dict{String, Any}()
+
+    function mean(x, u)
+        α = arctan(tan(u[2]) / 2)
+
+        xp = [
+            u[1] * cos(α + x[3]) / cos(α),
+            u[1] * sin(α + x[3]) / cos(α),
+            u[1] * tan(u[2])
+        ]
+
+        return xp
+    end
+    m = Smooth2(mean)
+    
+    # Variance, not std.dev.
+    M = [2/3, 2/3, 2/3]
+
+    Tx = DiagonalGaussianKernel(m, M)
+
+    X = Hyperrectangle(; low=[-5.0, -5.0, -3.4], high=[5.0, 5.0, 3.4])
+    U = Hyperrectangle(; low=[-1.0, -0.4], high=[4.0, 0.4])
+
+    system = DiscreteTimeStochasticSystem(parameters, X, U, Tx)
+
+    return system
+end
+
+function reduced_automated_vehicle_finite_time_ra()
+    system = reduced_automated_vehicle()
+
+    reach = Hyperrectangle(; low=[-5.75, -0.25, -3.45], high=[0.25, 5.75, 3.45]) × Universe(5)
+    avoid = Hyperrectangle(; low=[-5.75, -0.75, -3.45], high=[0.25, -0.25, 3.45]) × Universe(5)
+
+    ra_spec = InfiniteTimeReachAvoidSpecification(reach, avoid, 1e-6)
+    spec = ControllerSynthesisSpecification(maximize, ra_spec)
+
+    prob = BenchmarkProblem("reduced_automated_vehicle_finite_time_ra", system, spec)
 
     return prob
 end
