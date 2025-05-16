@@ -189,7 +189,7 @@ function fully_automated_anaesthesia()
         "V" => 16.044,
         "Ts" => 20.00,  # [s]
         "bolus_dose_rate" => 30.0,  # [mg/min]
-        "noise_variance" => 5.0
+        "noise_variance" => 1e-3
     )
     parameters["bolus_dose"] = parameters["bolus_dose_rate"] / 60 * parameters["Ts"]  # [mg]
     
