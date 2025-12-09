@@ -2,7 +2,13 @@
 # but it is mostly to ensure that they instantiate properly.
 
 
-benchmark_test_paths = ["automated_anaesthesia.jl", "building_automation_system.jl", "integrator_chain.jl", "van_der_pol.jl"]
+benchmark_test_paths = [
+    "automated_anaesthesia.jl",
+    "building_automation_system.jl",
+    "integrator_chain.jl",
+    "van_der_pol.jl",
+    "package_delivery.jl",
+]
 
 for benchmark_test_path in benchmark_test_paths
     @testset verbose = true "benchmarks/$benchmark_test_path" include(benchmark_test_path)

@@ -29,9 +29,9 @@ function integrator_chain(n_integrators)
 
     nominal = Linear2(A, B)
 
-    σ = [0.01 for i in 1:n_integrators]
+    var = [0.01 for i in 1:n_integrators]
 
-    Tx = DiagonalGaussianKernel(nominal, σ)
+    Tx = DiagonalGaussianKernel(nominal, var)
 
     X = Universe(n_integrators)
     U = LazySets.Interval(-1.0, 1.0)
