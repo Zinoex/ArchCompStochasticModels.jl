@@ -10,14 +10,14 @@ function pacakge_delivery()
     parameters = Dict{String,Any}()
 
     X = Hyperrectangle(; low = [-6.0, -6.0], high = [6.0, 6.0]) # X \in [-6, 6]x[-6, 6]
-    U = Hyperrectangle(; low = [-1.0, -1.0], high = [1.0, 1.0]) # U \in [-1, 1]x[-1, 1]
+    U = Universe(2) # U \in R^2
 
     A = Diagonal([0.9, 0.8])
     B = Diagonal([1.4, 1.4])
 
-    σ = [0.2, 0.2]
+    var = [0.2, 0.2]
     nominal = Linear2(A, B)
-    Tx = DiagonalGaussianKernel(nominal, σ)
+    Tx = DiagonalGaussianKernel(nominal, var)
 
     system = DiscreteTimeStochasticSystem(parameters, X, U, Tx)
 
@@ -30,7 +30,7 @@ function package_delivery_synthesis()
     p1, p2, p3 = package_delivery_regions()
 
     sets = Dict("p1" => p1, "p2" => p2, "p3" => p3)
-    formula = "F(p1 & (!p2 | p3))"
+    formula = "F(p1 & (!p2 U p3))"
     scLTL_spec = scLTLSpecification(sets, formula)
     spec = ControllerSynthesisSpecification(maximize, scLTL_spec)
 
@@ -38,3 +38,5 @@ function package_delivery_synthesis()
 
     return prob
 end
+
+
