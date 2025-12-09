@@ -41,6 +41,12 @@ struct BuchiSpecification <: BenchmarkProperty
     # TODO: Test validity of the formula
 end
 
+struct scLTLSpecification <: BenchmarkProperty
+    sets::Dict{String,<:LazySet}
+    formula::String
+    # TODO: Test validity of the formula
+end
+
 @enum SynthesisMode minimize maximize
 
 struct ControllerSynthesisSpecification{S <: BenchmarkProperty} <: BenchmarkSpecification
